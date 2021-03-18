@@ -1,8 +1,11 @@
 
 <ul class="list-group">
-  
+  <li (click)="clearCurrentBrand()"
+  [class]="getAllBrandClass()"
+  >TÜM MARKALAR</li>
+
   <li class="list-group-item" 
-  routerLink = "/cars/brands/{{brand.brandId}}"
+  
   *ngFor="let brand of brands"
   (click) = "setCurrentBrand(brand)"
   [class]="getCurrentBrandClass(brand)">

@@ -1,8 +1,13 @@
+import { query } from '@angular/animations';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Car } from 'src/app/models/car';
 import { CarDetailDto } from 'src/app/models/dtos/carDetailDto';
+import { ListResponseModel } from 'src/app/models/ListResponseModel';
 import { CarService } from 'src/app/services/car.service';
+
+
 
 @Component({
   selector: 'app-car',
@@ -13,25 +18,31 @@ export class CarComponent implements OnInit {
   cars:Car[] = [];
   cardtos:CarDetailDto[]=[];
   dataLoaded=false;
+  public routeurl:object
+
+  queryUrl:string = "https://localhost:44332/api/Cars/getbyquery?"
+  addUrl:string
+  public sendUrl:string
 
   constructor(private carService:CarService ,
-    private activatedRoute :ActivatedRoute) { }
+    private activatedRoute :ActivatedRoute,
+    private httpClient:HttpClient) { }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params=>{
-      if(params["brandId"]){
-        this.getCarsByCategory(params["brandId"])
-      }else{
-        this.getCars();
-      }
-      if(params["colorId"]){
-        this.getCarsByColor(params["colorId"])
-      }else{
-        this.getCars();
-      }
-    
-    });
+this.activatedRoute.queryParams.subscribe(params=>{
+  if (params["colorId"]) {
+    this.addUrl = this.addUrl + 'colorId=' + params["colorId"] + '&';
   }
+  if (params["brandId"]) {
+    this.addUrl = this.addUrl + 'brandId=' + params["brandId"] + '&';
+  }
+  this.sendUrl = this.queryUrl + this.addUrl
+  console.log(this.sendUrl)
+  this.getCarsQuery()
+  this.addUrl=""
+
+
+})}
 
   getCars(){
     this.carService.getCars().subscribe(response=>{
@@ -55,5 +66,13 @@ export class CarComponent implements OnInit {
       this.cars = response.data;
       this.dataLoaded = true;
     })
+  }
+
+  getCarsQuery(){
+    this.httpClient.get<ListResponseModel<Car>>(this.sendUrl).subscribe((response)=>{
+      this.cars= response.data
+      this.dataLoaded = true;
+    });
+    
   }
 }

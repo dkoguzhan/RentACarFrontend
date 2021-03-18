@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Color } from 'src/app/models/color';
 import { ColorService } from 'src/app/services/color.service';
 
@@ -12,7 +13,9 @@ export class ColorComponent implements OnInit {
   currentColor:Color;
   dataLoaded:boolean = false
 
-  constructor(private colorService:ColorService) { }
+  constructor(
+    private colorService:ColorService,
+    private router:Router) { }
 
   ngOnInit(): void {
 
@@ -26,6 +29,7 @@ export class ColorComponent implements OnInit {
   }
   setCurrentColor(color: Color) {
     this.currentColor = color;
+    this.router.navigate(['/cars'], { queryParams: { colorId: this.currentColor.colorId }, queryParamsHandling: 'merge' });
   }
 
   getCurrentColorClass(color:Color){
@@ -35,5 +39,19 @@ export class ColorComponent implements OnInit {
       return "list-group-item"
     }
   }
+
+  getAllColorClass(){
+    if(!this.currentColor){
+      return "list-group-item active";
+    }else{
+      return "list-group-item";
+    }
+  }
+
+  clearCurrentColor(){
+    this.currentColor = null;
+    this.router.navigate([], { queryParams: { colorId: undefined}, queryParamsHandling: 'merge'});
+  }
+  
 
 }

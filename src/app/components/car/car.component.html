@@ -1,12 +1,13 @@
 <table class="table">
   <thead *ngIf="dataLoaded == true">
     <tr>
-      <th>ID</th>
-      <th>MarkaAdı</th>
-      <th>GünlükÜcret</th>
-      <th>ModelYılı</th>
-      <th>Açıklama</th>
-      <th>Plaka</th>
+      <th>carId</th>
+      <th>brandId</th>
+      <th>colorId</th>
+      <th>dailyPrice</th>
+      <th>modelYear</th>
+      <th>description</th>
+      <th>plaque</th>
     </tr>
   </thead>
   <div class="d-flex justify-content-center">
@@ -22,10 +23,13 @@
   <tbody>
     <tr *ngFor="let car of cars">
     <td>{{ car.carId }}</td>
+    <td>{{ car.brandId}}</td>
+    <td>{{ car.colorId}}</td>
     <td>{{ car.dailyPrice }}</td>
     <td>{{ car.modelYear }}</td>
     <td>{{ car.description }}</td>
     <td>{{ car.plaque }}</td>
+    
   </tr>
 </tbody>
 </table>
